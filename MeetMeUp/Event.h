@@ -8,6 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol EventDelegate <NSObject>
+
+-(void)event:(NSArray *)eventsArray;
+
+@end
+
 @interface Event : NSObject
+
+@property id<EventDelegate>delegate;
+
+@property NSString *name;
+@property NSString *address;
+@property NSString *eventDescription;
+@property NSString *attendees;
+
+-(instancetype)initWithDictionary:(NSDictionary *)dictionary;
++(NSArray *)eventArrayFromDictionaryArray:(NSArray *)dictArray;
+-(void)pullEventsFromMeetupApi;
+
 
 @end

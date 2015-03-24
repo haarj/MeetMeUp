@@ -6,32 +6,36 @@
 //  Copyright (c) 2015 Justin Haar. All rights reserved.
 //
 
-#import "detailViewController.h"
+#import "DetailViewController.h"
+#import "WebpageViewController.h"
+#import "CommentsViewController.h"
 
-@interface detailViewController ()
+@interface DetailViewController ()
+
+@property (weak, nonatomic) IBOutlet UIScrollView *descriptionView;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UILabel *rsvpLabel;
+@property (weak, nonatomic) IBOutlet UILabel *hostingGroupLabel;
 
 @end
 
-@implementation detailViewController
+@implementation DetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    self.textView.text = self.selectedEvent.eventDescription;
+    self.rsvpLabel.text = self.selectedEvent.attendees;
+//    self.hostingGroupLabel.text = self.hostingGroup;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(UIButton *)sender
+{
+    WebpageViewController *viewController = segue.destinationViewController;
+//    viewController.webURL = self.webURL;
 }
-*/
 
 @end

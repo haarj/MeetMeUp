@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Event.h"
 
-@interface detailViewController : UIViewController
+@interface DetailViewController : UIViewController
+
+@property Event *selectedEvent;
 
 @end
