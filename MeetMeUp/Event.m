@@ -16,7 +16,9 @@
     self.name = [dictionary objectForKey:@"name"];
     self.attendees = [[dictionary objectForKey:@"yes_rsvp_count"] stringValue];
     self.address = [[dictionary objectForKey:@"venue"] objectForKey:@"address_1"];
+    self.hostingGroup = [[dictionary objectForKey:@"group"] objectForKey:@"name"];
     self.eventDescription = [dictionary objectForKey:@"description"];
+    self.webURL = [dictionary objectForKey:@"event_url"];
 
     return self;
 }
@@ -41,19 +43,8 @@
 
         NSArray *results = [Event eventArrayFromDictionaryArray:meetUps[@"results"]];
         [self.delegate event:results];
-
-
     }];
 }
-
-
-
-
-
-
-
-
-
 
 
 @end

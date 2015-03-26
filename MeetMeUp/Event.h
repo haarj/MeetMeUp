@@ -22,6 +22,8 @@
 @property NSString *address;
 @property NSString *eventDescription;
 @property NSString *attendees;
+@property NSString *hostingGroup;
+@property NSString *webURL;
 
 -(instancetype)initWithDictionary:(NSDictionary *)dictionary;
 +(NSArray *)eventArrayFromDictionaryArray:(NSArray *)dictArray;

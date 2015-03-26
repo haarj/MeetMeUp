@@ -26,7 +26,7 @@
     self.webView.delegate = self;
 
     self.activityIndicator.hidesWhenStopped = YES;
-    [self performLoadRequestWithString:self.webURL];
+    [self performLoadRequestWithString:self.selectedEvent.webURL];
 }
 
 

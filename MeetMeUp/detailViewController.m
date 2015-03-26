@@ -12,7 +12,6 @@
 
 @interface DetailViewController ()
 
-@property (weak, nonatomic) IBOutlet UIScrollView *descriptionView;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UILabel *rsvpLabel;
 @property (weak, nonatomic) IBOutlet UILabel *hostingGroupLabel;
@@ -21,21 +20,23 @@
 
 @implementation DetailViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 
     self.textView.text = self.selectedEvent.eventDescription;
     self.rsvpLabel.text = self.selectedEvent.attendees;
-//    self.hostingGroupLabel.text = self.hostingGroup;
+    self.title = self.selectedEvent.name;
+    self.hostingGroupLabel.text = self.selectedEvent.hostingGroup;
+    NSLog(@"%@, %@", self.rsvpLabel, self.hostingGroupLabel);
 }
 
 
-
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(UIButton *)sender
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    WebpageViewController *viewController = segue.destinationViewController;
-//    viewController.webURL = self.webURL;
+    if ([segue.identifier isEqual:@"webpage"]) {
+        WebpageViewController *viewController = segue.destinationViewController;
+        viewController.selectedEvent = self.selectedEvent;
+    }
 }
 
 @end

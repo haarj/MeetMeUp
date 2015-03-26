@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Event.h"
 
 @interface WebpageViewController : UIViewController
 
-@property NSString *webURL;
+@property Event *selectedEvent;
 
 @end

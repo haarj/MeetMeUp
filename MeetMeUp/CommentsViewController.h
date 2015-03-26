@@ -10,6 +10,4 @@
 
 @interface CommentsViewController : UIViewController
 
-
-
 @end
