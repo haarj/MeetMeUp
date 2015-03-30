@@ -11,11 +11,14 @@
 #import "WebpageViewController.h"
 #import "Event.h"
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchDisplayDelegate, EventDelegate>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, EventDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property NSArray *results;
+@property NSMutableArray *filteredArray;
+@property BOOL *isFiltered;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
 
@@ -38,17 +41,28 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (self.isFiltered) {
+        return self.filteredArray.count;
+    }else
+    {
     return self.results.count;
+    }
 }
 
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellID"];
-    Event *event = [self.results objectAtIndex:indexPath.row];
+    Event *event = [Event new];
+    if (self.isFiltered)
+    {
+        event = [self.filteredArray objectAtIndex:indexPath.row];
+    }else
+    {
+        event = [self.results objectAtIndex:indexPath.row];
+    }
     cell.textLabel.text = event.name;
     cell.detailTextLabel.text = event.address;
-
     cell.imageView.image = [UIImage imageNamed:@"Meetup"];
 
     return cell;
@@ -63,5 +77,39 @@
     Event *event = [self.results objectAtIndex:path.row];
     viewController.selectedEvent = event;
 }
+
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if (self.searchBar.text.length == 0)
+    {
+        self.isFiltered = NO;
+    }else
+    {
+        self.isFiltered = YES;
+        self.filteredArray = [NSMutableArray new];
+        for (Event *event in self.results)
+        {
+            NSRange nameRange = [event.name rangeOfString:self.searchBar.text options:NSCaseInsensitiveSearch];
+            if (nameRange.location != NSNotFound)
+            {
+                [self.filteredArray addObject:event];
+            }
+        }
+    }
+    [self.tableView reloadData];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end
