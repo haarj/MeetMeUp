@@ -11,10 +11,9 @@
 #import "WebpageViewController.h"
 #import "Event.h"
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, EventDelegate>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
 @property NSArray *results;
 @property NSMutableArray *filteredArray;
 @property BOOL *isFiltered;
@@ -23,19 +22,19 @@
 @end
 
 @implementation ViewController
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    Event *apiCallEvent = [[Event alloc]init];
-    apiCallEvent.delegate = self;
-    [apiCallEvent pullEventsFromMeetupApi];
+    [Event eventArrayFromDictionaryArray:^(NSArray *events) {
+        self.results = events;
+        //reloaded tableview in settermethod
+    }];
 }
 
--(void)event:(NSArray *)eventsArray
+-(void)setResults:(NSArray *)results
 {
-    self.results = eventsArray;
+    _results = results;
     [self.tableView reloadData];
 }
 
@@ -98,18 +97,5 @@
     }
     [self.tableView reloadData];
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @end
