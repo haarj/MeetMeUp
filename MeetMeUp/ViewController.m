@@ -14,9 +14,9 @@
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property NSArray *results;
-@property NSMutableArray *filteredArray;
-@property BOOL *isFiltered;
+@property (nonatomic)  NSArray *results;
+@property (nonatomic) NSMutableArray *filteredArray;
+@property BOOL isFiltered;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
@@ -28,43 +28,35 @@
 
     [Event eventArrayFromDictionaryArray:^(NSArray *events) {
         self.results = events;
+        self.filteredArray = [self.results mutableCopy];
         //reloaded tableview in settermethod
     }];
 }
 
--(void)setResults:(NSArray *)results
+-(void)setFilteredArray:(NSMutableArray *)filteredArray
 {
-    _results = results;
+    _filteredArray = filteredArray;
     [self.tableView reloadData];
 }
 
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.isFiltered) {
-        return self.filteredArray.count;
-    }else
-    {
-    return self.results.count;
-    }
+    return  self.filteredArray.count;
 }
 
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellID"];
-    Event *event = [Event new];
-    if (self.isFiltered)
-    {
-        event = [self.filteredArray objectAtIndex:indexPath.row];
-    }else
-    {
-        event = [self.results objectAtIndex:indexPath.row];
-    }
+    Event *event = [self.filteredArray objectAtIndex:indexPath.row];
+
     cell.textLabel.text = event.name;
-    cell.detailTextLabel.text = event.address;
+    cell.detailTextLabel.text = event.time;
     cell.imageView.image = [UIImage imageNamed:@"Meetup"];
     return cell;
 }
+
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -78,13 +70,13 @@
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    if (self.searchBar.text.length == 0)
+    if (searchText.length == 0)
     {
-        self.isFiltered = NO;
+        //mutable copy gives us a mutable copy of the filtered array
+        self.filteredArray = [self.results mutableCopy];
     }else
     {
-        self.isFiltered = YES;
-        self.filteredArray = [NSMutableArray new];
+        [self.filteredArray removeAllObjects];
         for (Event *event in self.results)
         {
             NSRange nameRange = [event.name rangeOfString:self.searchBar.text options:NSCaseInsensitiveSearch];

@@ -22,22 +22,28 @@
         self.hostingGroup = [[dictionary objectForKey:@"group"] objectForKey:@"name"];
         self.eventDescription = [dictionary objectForKey:@"description"];
         self.webURL = [dictionary objectForKey:@"event_url"];
-
+        self.timeSince1970 =[dictionary objectForKey:@"time"];
+        
     }
     return self;
 }
 
 
+-(NSString *)time
+{
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"MM/dd/yy HH:mm";
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.timeSince1970.doubleValue/1000];
+    return [formatter stringFromDate:date];
+}
+
 +(void)eventArrayFromDictionaryArray:(void (^)(NSArray *))complete
 {
     NSURL *url = [NSURL URLWithString:@"https://api.meetup.com/2/open_events.json?zip=94104&text=mobile&time=,1w&key=477d1928246a4e162252547b766d3c6d"];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:url] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+    {
         NSDictionary *meetUpDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
         NSMutableArray *meetUps = meetUpDict[@"results"];
-
         NSMutableArray *muteArray = [[NSMutableArray alloc]initWithCapacity:meetUps.count];
         for (NSDictionary *dict in meetUps)
         {
@@ -46,19 +52,5 @@
         complete(muteArray);
     }];
 }
-
-//-(void)pullEventsFromMeetupApi
-//{
-//    NSURL *url = [NSURL URLWithString:@"https://api.meetup.com/2/open_events.json?zip=94104&text=mobile&time=,1w&key=477d1928246a4e162252547b766d3c6d"];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-//
-//        NSDictionary *meetUps = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-//
-//        NSArray *results = [Event eventArrayFromDictionaryArray:meetUps[@"results"]];
-//        [self.delegate event:results];
-//    }];
-//}
-
 
 @end

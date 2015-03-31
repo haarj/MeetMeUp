@@ -16,6 +16,8 @@
 @property NSString *attendees;
 @property NSString *hostingGroup;
 @property NSString *webURL;
+@property (nonatomic) NSString *time;
+@property NSNumber *timeSince1970;
 
 -(instancetype)initWithDictionary:(NSDictionary *)dictionary;
 +(void)eventArrayFromDictionaryArray:(void(^)(NSArray *))complete;
