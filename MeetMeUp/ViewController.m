@@ -63,7 +63,6 @@
     cell.textLabel.text = event.name;
     cell.detailTextLabel.text = event.address;
     cell.imageView.image = [UIImage imageNamed:@"Meetup"];
-
     return cell;
 }
 
